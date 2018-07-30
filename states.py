@@ -1,3 +1,7 @@
+"""
+All the functions listed below are the posible states 
+for the FSM with its own execute call
+"""
 State = type("State", (object,), {})
 
 class Parking(State):

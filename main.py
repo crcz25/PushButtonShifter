@@ -1,60 +1,11 @@
+from FSM import FSM
+from states import Parking, Reverse, Neutral, Drive, Manual, Transition
+
 from pprint import pprint
-
-State = type("State", (object,), {})
-
-class Parking(State):
-    def Execute(self):
-        print('Car is in parking')
-
-class Reverse(State):
-    def Execute(self):
-        print('Car is in reverse')
-
-class Neutral(State):
-    def Execute(self):
-        print('Car is in neutral')
-
-class Drive(State):
-    def Execute(self):
-        print('Car is in drive')
-
-class Manual(State):
-    def Execute(self):
-        print('Car is in manual')
-
-class Transition(object):
-    def __init__(self, toState):
-        self.toState = toState
-
-    def Execute(self):
-        print('Transitioning...')
-
-class FSM(object):
-    def __init__(self, shifter):
-        self.shifter = shifter
-        self.states = {}
-        self.transitions = {}
-        self.currState = None
-        self.trans = None
-
-    def SetState(self, stateName):
-        self.currState = self.states[stateName]
-
-    def Transition(self, transName):
-        self.trans = self.transitions[transName]
-
-    def Execute(self):
-        if self.trans:
-            self.trans.Execute()
-            self.SetState(self.trans.toState)
-            self.trans = None
-        self.currState.Execute()
 
 class Shifter(object):
     def __init__(self):
         self.FSM = FSM(self)
-        self.Parking = True
-    
 
 def selectedGear(shifterInput):
     return {
@@ -72,18 +23,22 @@ def main():
     pprint(vars(shifter))
     pprint(vars(shifter.FSM))
     print()
-    print('Gear selected', gear)
+    print('Change gear', gear)
     print()
+
+    shifter.FSM.Transition(str(gear))
     
+    """     
     if shifter.Parking and gear is not 'toParking':
         shifter.FSM.Transition(str(gear))
         shifter.Parking = False
-    elif gear == 'toParking':
+    elif not shifter.Parking and gear == 'toParking':
         shifter.FSM.Transition(str(gear))
         shifter.Parking = True
     else:
         shifter.FSM.Transition(str(gear))
-        shifter.Parking = False
+        shifter.Parking = False 
+    """
 
     shifter.FSM.Execute()
     print()
